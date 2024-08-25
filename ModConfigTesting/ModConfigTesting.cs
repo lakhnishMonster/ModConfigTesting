@@ -31,8 +31,29 @@ namespace ModConfigTesting
             } 
         }
         )]
+        public Variant ConfiguredVariant1; //THIS MUST BE PLACED AFTER EACH CONFIGITEM OR ELSE YOU'll GET AN ERROR
+        /*
+        //For example, this won't work.
+        //[ConfigItem(Variant.OptionA, "", "MyConfigs")]
+        //[ConfigItem(Variant.OptionC, "", "MyConfigs")]
+        */
+
+        [ConfigItem(Variant.OptionC, "", "MyConfigs2")]
+        [ConfigManagerTitle("Test Config")]
+        [ConfigManagerDesc("Requires game restart and new run.")]
+        [ConfigOptions(new string[] { "Config Option C:\n 15,15,15 Stats",
+                                      "Config Option D:\n 20,20,20 Stats" },
+        new object[]
+        {
+            new Variant[]
+            {
+                Variant.OptionC,
+                Variant.OptionD
+            }
+        }
+        )]
+        public Variant ConfiguredVariant2;
         
-        public Variant ConfiguredVariant;
 
         //MOD INFO
         public override string GUID => "lakhnish_monster.wildfrost.configtesting";
@@ -80,29 +101,53 @@ namespace ModConfigTesting
             cards = new List<CardDataBuilder>();
             //CARDS HERE
 
-            //CREATING OUR BASE CARD
-            CardDataBuilder myCardBuilder = new CardDataBuilder(this)
-                .CreateUnit("myVariantCard", "myVariantCard")
+            //CREATING OUR FIRST BASE CARD
+            CardDataBuilder myFirstCardBuilder = new CardDataBuilder(this)
+                .CreateUnit("myFirstCard", "myFirstCard")
                 .SetSprites("", "")
                 .IsPet((ChallengeData)null, value: true);
             
             //CREATING THE DIFFERENT VARIANTS FOR WHAT OUR CARD COULD BE DEPENDING ON WHICH MOD CONFIG THE USER CHOSES
-            switch(ConfiguredVariant)
+            switch(ConfiguredVariant1)
             {
                 case Variant.OptionA:
-                    myCardBuilder.SetStats(10,10,10);
+                    myFirstCardBuilder.SetStats(10,10,10);
                     break;
 
                 case Variant.OptionB:
-                    myCardBuilder.SetStats(5,5,5);
+                    myFirstCardBuilder.SetStats(5,5,5);
                     break;
 
                 default:
 
                     break;
             }
+            cards.Add(myFirstCardBuilder);
 
-            cards.Add(myCardBuilder);
+            //CREATING OUR SECOND BASE CARD
+            CardDataBuilder mySecondCardBuilder = new CardDataBuilder(this)
+            .CreateUnit("mySecondCard", "mySecondCard")
+            .SetSprites("", "")
+            .IsPet((ChallengeData)null, value: true);
+
+            //CREATING THE DIFFERENT VARIANTS FOR WHAT OUR CARD COULD BE DEPENDING ON WHICH MOD CONFIG THE USER CHOSES
+            switch (ConfiguredVariant2)
+            {
+                case Variant.OptionA:
+                    mySecondCardBuilder.SetStats(15, 15, 15);
+                    break;
+
+                case Variant.OptionB:
+                    mySecondCardBuilder.SetStats(20, 20, 20);
+                    break;
+
+                default:
+
+                    break;
+            }
+            cards.Add(mySecondCardBuilder);
+
+
             preLoaded = true;
         }
 

@@ -4,5 +4,7 @@ namespace ModConfigTesting{}
 public enum Variant
 {
     OptionA,
-    OptionB
+    OptionB,
+    OptionC,
+    OptionD
 }
